@@ -5,6 +5,7 @@ const createError = require('http-errors');
 const cors = require('cors');
 const express = require('express');
 const logger = require('morgan');
+const route = require('./src/route/index');
 
 const port = process.env.DB_PORT;
 const app = express();
@@ -24,6 +25,8 @@ app.use((_, res, next) => {
 app.listen(port, () => {
   console.log('server on using port', port);
 });
+
+app.use('', route);
 
 app.use('/file', express.static('./uploads'));
 //  catch error and forward to error handler
