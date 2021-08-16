@@ -27,7 +27,6 @@ app.listen(port, () => {
 });
 
 app.use('', route);
-
 app.use('/file', express.static('./uploads'));
 //  catch error and forward to error handler
 
