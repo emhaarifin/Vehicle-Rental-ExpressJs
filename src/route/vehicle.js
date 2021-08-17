@@ -6,8 +6,9 @@ const upload = require('../middleware/multer');
 
 route
   .get('/', vehicle.getVehicle)
-  .post('/', upload.single('image'), vehicle.addVehicle)
   .get('/:id', vehicle.getVehicleById)
+  .post('/', upload.array('image', 3), vehicle.addVehicle)
+  .put('/:id', upload.array('image', 3), vehicle.updateVehicle)
   .delete('/:id', vehicle.deleteVehicle);
 
 module.exports = route;
