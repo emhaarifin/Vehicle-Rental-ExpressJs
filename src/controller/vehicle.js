@@ -93,19 +93,30 @@ module.exports = {
       description: req.body.description,
       price: req.body.price,
       status: req.body.status,
-      image: `${process.env.BASE_URL}/file/${req.file.filename}`,
+      image: req.files,
       stock: req.body.stock,
     };
+
+    const locationImage = `${process.env.BASE_URL}/file/`;
+    const images = [];
+    data.image.forEach((item) => {
+      images.push((locationImage + item.filename).replace(/ /g, ''));
+    });
+    const toStr = JSON.stringify(images);
+    data.image = toStr;
+
     vehicle
       .addVehicle(data)
       .then(() => {
         helper.response(res, 'Succes input data', data, 200);
       })
       .catch((err) => {
-        fs.unlink(`${dirPath}/${req.file.filename}`, (err) => {
-          if (err) {
-            console.log('Error unlink image product!' + err);
-          }
+        data.image.forEach((item) => {
+          fs.unlink(`${dirPath}/${item.filename}`, (err) => {
+            if (err) {
+              console.log('Error unlink image product!' + err);
+            }
+          });
         });
         const { location_id, category_id, name, description, price, status, image, stock } = data;
         if (!location_id) return helper.response(res, "Location can't be null!", null, 400);
@@ -118,6 +129,64 @@ module.exports = {
         if (!stock) return helper.response(res, "Stock can't be null!", null, 400);
       });
   },
+
+  updateVehicle: (req, res) => {
+    const id = req.params.id;
+    const data = {
+      location_id: req.body.location_id,
+      category_id: req.body.category_id,
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      status: req.body.status,
+      stock: req.body.stock,
+    };
+    if (req.files) {
+      data.image = req.files;
+      const locationImage = `${process.env.BASE_URL}/file/`;
+      const images = [];
+      data.image.forEach((item) => {
+        images.push((locationImage + item.filename).replace(/ /g, ''));
+      });
+      const toStr = JSON.stringify(images);
+      data.image = toStr;
+
+      console.log(data);
+      vehicle
+        .updateVehicle(Number(id), data)
+        .then(() => {
+          helper.response(res, 'Succes input data', data, 200);
+        })
+        .catch((err) => {
+          data.image.forEach((item) => {
+            fs.unlink(`${dirPath}/${item.filename}`, (err) => {
+              if (err) {
+                console.log('Error unlink image product!' + err);
+              }
+            });
+          });
+          helper.response(res, err.message, null, 400);
+        });
+    } else {
+      vehicle
+        .updateVehicle(Number(id), data)
+        .then(() => {
+          helper.response(res, 'Succes input data', data, 200);
+        })
+        .catch((err) => {
+          data.image.forEach((item) => {
+            fs.unlink(`${dirPath}/${item.filename}`, (err) => {
+              if (err) {
+                console.log('Error unlink image product!' + err);
+              }
+            });
+          });
+          console.log(err.message);
+          helper.response(res, err.message, null, 400);
+        });
+    }
+  },
+
   deleteVehicle: (req, res) => {
     const id = req.params.id;
     vehicle
