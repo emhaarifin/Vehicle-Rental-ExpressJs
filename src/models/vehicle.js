@@ -13,7 +13,7 @@ module.exports = {
       });
     });
   },
-  updateProduct: (data, id) => {
+  updateVehicle: (id, data) => {
     return new Promise((resolve, reject) => {
       connection.query('UPDATE vehicles SET ? WHERE id = ?', [data, id], (error, result) => {
         if (!error) {
