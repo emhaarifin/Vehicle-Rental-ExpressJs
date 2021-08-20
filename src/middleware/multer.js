@@ -23,7 +23,6 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(null, false);
-      console.log(file);
       return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
   },

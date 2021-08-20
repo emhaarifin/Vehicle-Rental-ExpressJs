@@ -35,7 +35,6 @@ module.exports = {
       });
     });
   },
-
   getALlVehicle: (searchVehicle, table, keyword, search, sortBy, sort, offset, limit) => {
     return new Promise((resolve, reject) => {
       connection.query(

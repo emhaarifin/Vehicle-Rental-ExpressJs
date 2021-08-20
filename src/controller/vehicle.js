@@ -27,6 +27,10 @@ module.exports = {
         table = 'vehicles';
         keyword = 'status = ' + JSON.stringify('Available');
         break;
+      case 'category':
+        table = 'category';
+        keyword = 'name_category';
+        break;
       default:
         keyword = 'name';
         table = 'vehicles';
@@ -39,7 +43,6 @@ module.exports = {
         let total = result[0].TotalVehicle;
         const prevPage = page === 1 ? 1 : page - 1;
         const nextPage = page === total ? total : page + 1;
-        console.log(limit, offset, search, 'tes juga');
         vehicle
           .getALlVehicle(searchVehicle, table, keyword, search, sortBy, sort, offset, limit)
           .then((result) => {
@@ -48,7 +51,7 @@ module.exports = {
               data_found: Math.ceil(result.length),
               per_page: limit,
               current_page: page,
-              totalPage: Math.ceil(total / limit),
+              totalPage: Math.ceil(total / limit - 1),
               nextLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + nextPage)}`,
               prevLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + prevPage)}`,
             };
@@ -60,7 +63,6 @@ module.exports = {
                 const element = JSON.parse(products[i].image);
                 product.image = element;
                 data.push(product);
-                console.log(data, 'ele');
               }
 
               helper.responsePagination(res, 'OK', 200, false, pageDetail, data);
@@ -69,12 +71,10 @@ module.exports = {
             }
           })
           .catch((err) => {
-            console.log(err);
             helper.response(res, err.message, null, 404);
           });
       })
       .catch((err) => {
-        console.log(err);
         helper.response(res, err.message, null, 404);
       });
   },
@@ -91,7 +91,6 @@ module.exports = {
             const element = JSON.parse(products[i].image);
             product.image = element;
             data.push(product);
-            console.log(data, 'ele');
           }
           helper.response(res, 'Success get detail vehicle', data);
         } else {
@@ -99,7 +98,6 @@ module.exports = {
         }
       })
       .catch((err) => {
-        console.log(err);
         helper.response(res, err.message, null, 404);
       });
   },
@@ -122,7 +120,6 @@ module.exports = {
     });
     const toStr = JSON.stringify(images);
     data.image = toStr;
-    console.log(req.files, 'tc');
     vehicle
       .addVehicle(data)
       .then(() => {
@@ -131,11 +128,9 @@ module.exports = {
       .catch((err) => {
         const errImg = JSON.parse(data.image);
         req.files.map((item) => {
-          console.log(err);
           fs.unlink(`${dirPath}/${item.filename}`.replace(/ /g, ''), (err) => {
             if (err) {
               helper.response(res, err, null, 401);
-              console.log('Error unlink image product!' + err);
             }
           });
         });
@@ -163,7 +158,6 @@ module.exports = {
       stock: req.body.stock,
     };
     if (req.files.length > 0) {
-      console.log(req.files.length);
       data.image = req.files;
       const locationImage = `${process.env.BASE_URL}/file/`;
       const images = [];
@@ -173,7 +167,6 @@ module.exports = {
       const toStr = JSON.stringify(images);
       data.image = toStr;
     }
-    console.log(req.files.length, '@');
     vehicle
       .updateVehicle(Number(id), data)
       .then(() => {
@@ -182,7 +175,6 @@ module.exports = {
       .catch((err) => {
         const errImg = JSON.parse(data.image);
         req.files.map((item) => {
-          console.log(err);
           fs.unlink(`${dirPath}/${item.filename}`.replace(/ /g, ''), (err) => {
             if (err) {
               helper.response(res, err, null, 401);
@@ -192,27 +184,6 @@ module.exports = {
         });
         helper.response(res, err.message, null, 400);
       });
-    //  else {
-    //   vehicle
-    //     .updateVehicle(Number(id), data)
-    //     .then(() => {
-    //       helper.response(res, 'Succes input data', data, 200);
-    //     })
-    //     .catch((err) => {
-    //       const errImg = JSON.parse(data.image);
-    //       req.files.map((item) => {
-    //         console.log(err);
-    //         fs.unlink(`${dirPath}/${item.filename}`.replace(/ /g, ''), (err) => {
-    //           if (err) {
-    //             helper.response(res, err, null, 401);
-    //             console.log('Error unlink image product!' + err);
-    //           }
-    //         });
-    //       });
-    //       console.log(err.message);
-    //       helper.response(res, err.message, null, 400);
-    //     });
-    // }
   },
 
   deleteVehicle: (req, res) => {
@@ -227,7 +198,7 @@ module.exports = {
         }
       })
       .catch((err) => {
-        helper.response(res, 404, err);
+        helper.response(res, err.message, null);
       });
   },
 };
