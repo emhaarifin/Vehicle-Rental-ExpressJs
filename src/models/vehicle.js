@@ -1,4 +1,3 @@
-const { off } = require('../../src/confiq/db');
 const connection = require('../../src/confiq/db');
 
 module.exports = {

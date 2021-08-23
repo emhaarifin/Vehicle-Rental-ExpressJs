@@ -10,7 +10,11 @@ const route = require('./src/route/index');
 const port = process.env.DB_PORT;
 const app = express();
 
-app.use(cors());
+const optionCors = {
+  credentials: true,
+  origin: 'http://localhost:3000',
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
@@ -21,7 +25,7 @@ app.use((_, res, next) => {
   res.header('Access-Control-Allow-Credentials', true); // If needed
   next();
 });
-
+app.use(cors(optionCors));
 app.listen(port, () => {
   console.log('server on using port', port);
 });
