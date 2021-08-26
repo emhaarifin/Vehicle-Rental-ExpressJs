@@ -11,7 +11,7 @@ module.exports = {
   register: async (req, res) => {
     const { fullname, email, password, roles } = req.body;
     const user = await users.findUser(email);
-    console.log(user);
+
     if (user.length > 0) {
       return helper.response(res, 'email sudah ada', null, 401);
     }
@@ -21,17 +21,16 @@ module.exports = {
           id: uuidv4(),
           fullname: fullname,
           email: email,
-          roles: roles,
+          roles: 'member',
           password: hash,
           status: 'inactive',
         };
-        console.log(data);
         if (roles === 'admin') {
           data.roles = 'admin';
         } else {
           data.roles = 'member';
         }
-        console.log(data);
+
         users
           .register(data)
           .then(() => {
@@ -47,7 +46,8 @@ module.exports = {
                   },
                 });
                 let activeEmail = `<div>
-                  <p>Follow link for activation</p>
+                  <p>Hi, ${data.fullname}<p>
+                  <p>Thankyou for creating a Vehicle-Rental Account. For your security, please verify your account.</p>
                   <a href="http://localhost:4000/auth/actived/${res}">click</a>
                   </div>`;
                 transporter.sendMail({
@@ -70,7 +70,6 @@ module.exports = {
   login: async (req, res, next) => {
     const checkUser = await users.findUser(req.body.email);
     if (checkUser.length > 0) {
-      console.log(checkUser, 'cek');
       const checkPassword = bcrypt.compare(req.body.password, checkUser[0].password);
       if (checkPassword) {
         const { id, name, roles, avatar } = checkUser[0];
@@ -83,36 +82,44 @@ module.exports = {
         };
         delete payload.email;
         delete payload.password;
-        const token = jwt.sign(payload, process.env.SECRET_KEY, {
-          expiresIn: '1h',
-        });
-        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
-          expiresIn: '24h',
-        });
-        res.cookie('token', token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 60,
-          secure: true,
-          path: '/',
-          sameSite: 'strict',
-        });
-        res.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 60 * 24,
-          secure: true,
-          path: '/',
-          sameSite: 'strict',
-        });
-        res.cookie('data_user', payload, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 60 * 24,
-          secure: true,
-          path: '/',
-          sameSite: 'strict',
-        });
-        // payload.token = token;
-        // payload.refreshToken = refreshToken;
-        helper.response(res, 'Login success', payload, 200);
+        jwt.sign(
+          payload,
+          process.env.SECRET_KEY,
+          {
+            expiresIn: '1h',
+          },
+          function (err, token) {
+            res.cookie('token', token, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            res.cookie('avatar', payload.avatar, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            res.cookie('roles', payload.roles, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            res.cookie('id', payload.id, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
+            });
+            helper.response(res, 'Login success', payload, 200);
+          }
+        );
       } else {
         helper.response(res, 'Password wrong', null, 401);
       }
@@ -151,14 +158,13 @@ module.exports = {
   updateProfile: async (req, res) => {
     const id = req.params.id;
     const data = {
-      // name: req.body.name,
-      email: req.body.email,
       phone_number: req.body.phone_number,
-      gender: req.body.gender,
       adress: req.body.adress,
-      date_of_birth: req.body.date_of_birth,
     };
 
+    if (req.body.gender) {
+      data.gender = req.body.gender;
+    }
     if (req.file) {
       data.avatar = `${process.env.BASE_URL}/file/${req.file.filename}`;
     }
@@ -190,5 +196,12 @@ module.exports = {
           });
       }
     });
+  },
+  logout: (req, res) => {
+    res.clearCookie('token');
+    res.clearCookie('avatar');
+    res.clearCookie('id');
+    res.clearCookie('roles');
+    helper.response(res, 'Success Logout', null, 200);
   },
 };

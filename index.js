@@ -5,6 +5,9 @@ const createError = require('http-errors');
 const cors = require('cors');
 const express = require('express');
 const logger = require('morgan');
+
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const route = require('./src/route/index');
 
 const port = process.env.DB_PORT;
@@ -15,6 +18,7 @@ const optionCors = {
   origin: 'http://localhost:3000',
 };
 
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
@@ -26,6 +30,8 @@ app.use((_, res, next) => {
   next();
 });
 app.use(cors(optionCors));
+
+app.use(cookieParser());
 app.listen(port, () => {
   console.log('server on using port', port);
 });

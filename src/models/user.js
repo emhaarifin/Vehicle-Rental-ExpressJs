@@ -73,7 +73,7 @@ module.exports = {
   // },
   updateUser: (id, data) => {
     return new Promise((resolve, reject) => {
-      connection.query('UPDATE users SET ? WHERE id = ?', [data, id], (error, result) => {
+      connection.query(`UPDATE users SET ? WHERE id = ?`, [data, id], (error, result) => {
         if (!error) {
           resolve(result);
         } else {

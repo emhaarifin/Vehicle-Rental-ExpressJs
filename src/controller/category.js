@@ -10,7 +10,6 @@ module.exports = {
         helper.response(res, 'OK', result);
       })
       .catch((err) => {
-        console.log(err);
         helper.response(res, null, 404, 'Data Not Found');
       });
   },
@@ -27,7 +26,6 @@ module.exports = {
       })
       .catch((error) => {
         helper.response(res, 'Error input category', null, 410);
-        console.log(error);
       });
   },
   updateCategory: (req, res) => {
@@ -42,7 +40,6 @@ module.exports = {
         helper.response(res, 'Success update category');
       })
       .catch((err) => {
-        console.log(err);
         helper.response(res, null, 404, err);
       });
   },
@@ -54,7 +51,6 @@ module.exports = {
         helper.response(res, 'Success delete category');
       })
       .catch((err) => {
-        console.log(err);
         helper.response(res, null, 404, 'Id cateogry for delete No found');
       });
   },

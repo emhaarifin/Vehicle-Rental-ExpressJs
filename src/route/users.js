@@ -3,6 +3,7 @@
 const express = require('express');
 const route = express.Router();
 const user = require('../controller/user');
+const { verifyAccess } = require('../middleware/auth');
 
 const upload = require('../middleware/multer');
 
@@ -12,6 +13,7 @@ route
   .post('/refreshtoken', user.refreshToken)
   .put('/profile/update/:id', upload.single('image'), user.updateProfile)
   .get('/actived/:token', user.activactions)
-  .get('/profile/:id', user.getUserByID);
+  .get('/profile/:id', user.getUserByID)
+  .get('/logout', user.logout);
 
 module.exports = route;

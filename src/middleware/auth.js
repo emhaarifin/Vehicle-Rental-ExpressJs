@@ -10,8 +10,6 @@ module.exports = {
       error.code = 401;
       return next(error);
     }
-    console.log(token, 'token');
-    // const result = token;
     jwt.verify(token, process.env.SECRET_KEY, function (err, decoded) {
       if (err) {
         if (err.name === 'TokenExpiredError') {
@@ -28,8 +26,6 @@ module.exports = {
           return next(error);
         }
       }
-      console.log(decoded);
-      // req.token = token;
       req.id = decoded.id;
       req.status = decoded.status;
       req.roles = decoded.roles;
@@ -43,7 +39,6 @@ module.exports = {
       if (err) {
         res.status(500).send(err);
       }
-
       if (data) {
         const parseData = JSON.parse(data);
         if (parseData[userId].includes(token)) {

@@ -7,8 +7,8 @@ const auth = require('../middleware/auth');
 
 route
   .get('/', vehicle.getVehicle)
-  .get('/:id', auth.verifyAccess, vehicle.getVehicleById)
-  .post('/', upload.array('image', 3), auth.verifyAccess, vehicle.addVehicle)
+  .get('/:id', vehicle.getVehicleById)
+  .post('/', upload.array('image', 3), vehicle.addVehicle)
   .put('/:id', upload.array('image', 3), vehicle.updateVehicle)
   .delete('/:id', vehicle.deleteVehicle);
 
