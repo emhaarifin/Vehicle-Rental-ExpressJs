@@ -10,12 +10,11 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const route = require('./src/route/index');
 
-const port = process.env.DB_PORT;
+const port = process.env.PORT;
 const app = express();
 
 const optionCors = {
   credentials: true,
-  origin: 'http://localhost:3000',
 };
 
 app.use(helmet());
