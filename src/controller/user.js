@@ -48,7 +48,7 @@ module.exports = {
                 let activeEmail = `<div>
                   <p>Hi, ${data.fullname}<p>
                   <p>Thankyou for creating a Vehicle-Rental Account. For your security, please verify your account.</p>
-                  <a href="http://localhost:4000/auth/actived/${res}">click</a>
+                  <a href="${process.env.BASE_URL}/auth/actived/${res}">click</a>
                   </div>`;
                 transporter.sendMail({
                   from: `Blanja`, // sender address
