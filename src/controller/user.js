@@ -70,7 +70,7 @@ module.exports = {
   login: async (req, res, next) => {
     const checkUser = await users.findUser(req.body.email);
     if (checkUser.length > 0) {
-      const checkPassword = bcrypt.compare(req.body.password, checkUser[0].password);
+      const checkPassword = await bcrypt.compare(req.body.password, checkUser[0].password);
       if (checkPassword) {
         const { id, name, roles, avatar } = checkUser[0];
         const payload = {
