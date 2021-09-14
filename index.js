@@ -15,20 +15,14 @@ const app = express();
 
 const optionCors = {
   credentials: true,
+  origin: true,
 };
 
+app.use(cors(optionCors));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
-app.use((_, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-  res.header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization'); // If needed
-  res.header('Access-Control-Allow-Credentials', true); // If needed
-  next();
-});
-// app.use(cors(optionCors));
 
 app.use(cookieParser());
 app.listen(port, () => {
