@@ -7,7 +7,7 @@ const express = require('express');
 const logger = require('morgan');
 
 const helmet = require('helmet');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const route = require('./src/route/index');
 
 const port = process.env.PORT;
@@ -18,8 +18,7 @@ const optionCors = {
   origin: true,
 };
 
-// app.use(cookieParser());
-
+app.use(cookieParser());
 app.use(cors(optionCors));
 app.use(helmet());
 app.use(express.json());

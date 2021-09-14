@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const helper = require('../helper/response');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const cookie = require('cookie');
 
 module.exports = {
   register: async (req, res) => {
@@ -90,46 +89,34 @@ module.exports = {
             expiresIn: '1h',
           },
           function (err, token) {
-            res.setHeader(
-              'Set-Cookie',
-              cookie.serialize('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                maxAge: 60 * 60 * 60 * 24,
-                sameSite: 'None',
-                path: '/',
-              })
-            );
-            res.setHeader(
-              'Set-Cookie',
-              cookie.serialize('avatar', payload.avatar, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                maxAge: 60 * 60 * 60 * 24,
-                sameSite: 'None',
-                path: '/',
-              })
-            );
-            res.setHeader(
-              'Set-Cookie',
-              cookie.serialize('roles', payload.roles, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                maxAge: 60 * 60 * 60 * 24,
-                sameSite: 'None',
-                path: '/',
-              })
-            );
-            res.setHeader(
-              'Set-Cookie',
-              cookie.serialize('id', payload.id, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development',
-                maxAge: 60 * 60 * 60 * 24,
-                sameSite: 'None',
-                path: '/',
-              })
-            );
+            res.cookie('token', token, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'None',
+            });
+            res.cookie('avatar', payload.avatar, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'None',
+            });
+            res.cookie('roles', payload.roles, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'None',
+            });
+            res.cookie('id', payload.id, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 60 * 24,
+              secure: true,
+              path: '/',
+              sameSite: 'None',
+            });
             helper.response(res, 'Login success', payload, 200);
           }
         );
