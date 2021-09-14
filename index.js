@@ -18,13 +18,14 @@ const optionCors = {
   origin: true,
 };
 
+app.use(cookieParser());
+
 app.use(cors(optionCors));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger('dev'));
 
-app.use(cookieParser());
 app.listen(port, () => {
   console.log('server on using port', port);
 });
