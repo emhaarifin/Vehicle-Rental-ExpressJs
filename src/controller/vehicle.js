@@ -61,6 +61,13 @@ module.exports = {
               for (let i = 0; i < products.length; i++) {
                 let product = products[i];
                 const element = JSON.parse(products[i].image);
+                if (element.slice(0, 22) == 'http://localhost:4000') {
+                  element.replace('http://localhost:4000', `${process.env.BACKEND_URL}`);
+                  product.image = element;
+                } else if (element.slice(0, 5) == 'file/') {
+                  element.replace('file/', `${process.env.BACKEND_URL}/file/`);
+                  product.image = element;
+                }
                 product.image = element;
                 data.push(product);
               }
@@ -120,6 +127,16 @@ module.exports = {
     });
     const toStr = JSON.stringify(images);
     data.image = toStr;
+
+    const { location_id, category_id, name, description, price, status, image, stock } = data;
+    if (!location_id) return helper.response(res, "Location can't be null!", null, 400);
+    if (!category_id) return helper.response(res, "Category can't be null!", null, 400);
+    if (!name) return helper.response(res, "Name can't be null!", null, 400);
+    if (!description) return helper.response(res, "Description can't be null!", null, 400);
+    if (!price) return helper.response(res, "Price can't be null!", null, 400);
+    if (!status) return helper.response(res, "Status can't be null!", null, 400);
+    if (!image) return helper.response(res, "Image can't be null!", null, 400);
+    if (!stock) return helper.response(res, "Stock can't be null!", null, 400);
     vehicle
       .addVehicle(data)
       .then(() => {
@@ -134,15 +151,6 @@ module.exports = {
             }
           });
         });
-        const { location_id, category_id, name, description, price, status, image, stock } = data;
-        if (!location_id) return helper.response(res, "Location can't be null!", null, 400);
-        if (!category_id) return helper.response(res, "Category can't be null!", null, 400);
-        if (!name) return helper.response(res, "Name can't be null!", null, 400);
-        if (!description) return helper.response(res, "Description can't be null!", null, 400);
-        if (!price) return helper.response(res, "Price can't be null!", null, 400);
-        if (!status) return helper.response(res, "Status can't be null!", null, 400);
-        if (!image) return helper.response(res, "Image can't be null!", null, 400);
-        if (!stock) return helper.response(res, "Stock can't be null!", null, 400);
       });
   },
 
