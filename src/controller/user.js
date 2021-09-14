@@ -48,7 +48,7 @@ module.exports = {
                 let activeEmail = `<div>
                   <p>Hi, ${data.fullname}<p>
                   <p>Thankyou for creating a Vehicle-Rental Account. For your security, please verify your account.</p>
-                  <a href="${process.env.BASE_URL}/auth/actived/${res}">click</a>
+                  <a href="${process.env.BASE_URL}/activation-account/${res}">click</a>
                   </div>`;
                 transporter.sendMail({
                   from: `Blanja`, // sender address
@@ -188,11 +188,11 @@ module.exports = {
         users
           .activation(email)
           .then(() => {
-            res.redirect(`${process.env.URL_FRONT_END}/activation`);
+            res.redirect(`${process.env.BASE_URL}/`);
             // helper.response(res, 'Activation Succes');
           })
           .catch((error) => {
-            res.redirect(`${process.env.URL_FRONT_END}/activation`);
+            res.redirect(`${process.env.BASE_URL}/`);
             // helper.response(res, error.message);
           });
       }
