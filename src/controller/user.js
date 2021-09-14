@@ -89,34 +89,34 @@ module.exports = {
             expiresIn: '1h',
           },
           function (err, token) {
-            res.cookie('token', token, {
-              httpOnly: true,
-              maxAge: 24 * 60 * 60 * 1000,
-              secure: true,
-              path: '/',
-              sameSite: 'None',
-            });
-            res.cookie('avatar', payload.avatar, {
-              httpOnly: true,
-              maxAge: 24 * 60 * 60 * 1000,
-              secure: true,
-              path: '/',
-              sameSite: 'None',
-            });
-            res.cookie('roles', payload.roles, {
-              httpOnly: true,
-              maxAge: 24 * 60 * 60 * 1000,
-              secure: true,
-              path: '/',
-              sameSite: 'None',
-            });
-            res.cookie('id', payload.id, {
-              httpOnly: true,
-              maxAge: 24 * 60 * 60 * 1000,
-              secure: true,
-              path: '/',
-              sameSite: 'None',
-            });
+            // res.cookie('token', token, {
+            //   httpOnly: true,
+            //   maxAge: 24 * 60 * 60 * 1000,
+            //   secure: true,
+            //   path: '/',
+            //   sameSite: 'None',
+            // });
+            // res.cookie('avatar', payload.avatar, {
+            //   httpOnly: true,
+            //   maxAge: 24 * 60 * 60 * 1000,
+            //   secure: true,
+            //   path: '/',
+            //   sameSite: 'None',
+            // });
+            // res.cookie('roles', payload.roles, {
+            //   httpOnly: true,
+            //   maxAge: 24 * 60 * 60 * 1000,
+            //   secure: true,
+            //   path: '/',
+            //   sameSite: 'None',
+            // });
+            // res.cookie('id', payload.id, {
+            //   httpOnly: true,
+            //   maxAge: 24 * 60 * 60 * 1000,
+            //   secure: true,
+            //   path: '/',
+            //   sameSite: 'None',
+            // });
             payload.token = token;
             helper.response(res, 'Login success', payload, 200);
           }
