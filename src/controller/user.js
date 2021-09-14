@@ -117,6 +117,7 @@ module.exports = {
               path: '/',
               sameSite: 'None',
             });
+            payload.token = token;
             helper.response(res, 'Login success', payload, 200);
           }
         );
