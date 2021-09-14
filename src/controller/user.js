@@ -187,13 +187,11 @@ module.exports = {
         const email = decode.email;
         users
           .activation(email)
-          .then(() => {
-            res.redirect(`${process.env.BASE_URL}/`);
-            // helper.response(res, 'Activation Succes');
+          .then((res) => {
+            helper.response(res, 'Activation Succes', null, 200);
           })
           .catch((error) => {
-            res.redirect(`${process.env.BASE_URL}/`);
-            // helper.response(res, error.message);
+            helper.response(res, error.message, null, 401);
           });
       }
     });
