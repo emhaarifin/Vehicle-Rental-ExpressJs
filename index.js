@@ -28,7 +28,7 @@ app.use((_, res, next) => {
   res.header('Access-Control-Allow-Credentials', true); // If needed
   next();
 });
-app.use(cors(optionCors));
+// app.use(cors(optionCors));
 
 app.use(cookieParser());
 app.listen(port, () => {
