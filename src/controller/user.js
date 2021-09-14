@@ -91,23 +91,23 @@ module.exports = {
           function (err, token) {
             res.cookie('token', token, {
               maxAge: 60 * 60 * 60 * 24,
-              secure: true,
               sameSite: 'none',
+              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
             });
             res.cookie('avatar', payload.avatar, {
               maxAge: 60 * 60 * 60 * 24,
-              secure: true,
               sameSite: 'none',
+              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
             });
             res.cookie('roles', payload.roles, {
               maxAge: 60 * 60 * 60 * 24,
-              secure: true,
               sameSite: 'none',
+              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
             });
             res.cookie('id', payload.id, {
               maxAge: 60 * 60 * 60 * 24,
-              secure: true,
               sameSite: 'none',
+              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
             });
             helper.response(res, 'Login success', payload, 200);
           }
