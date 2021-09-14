@@ -94,28 +94,28 @@ module.exports = {
               maxAge: 60 * 60 * 60 * 24,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              sameSite: 'none',
             });
             res.cookie('avatar', payload.avatar, {
               httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              sameSite: 'none',
             });
             res.cookie('roles', payload.roles, {
               httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              sameSite: 'none',
             });
             res.cookie('id', payload.id, {
               httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
               secure: true,
               path: '/',
-              sameSite: 'strict',
+              sameSite: 'none',
             });
             helper.response(res, 'Login success', payload, 200);
           }

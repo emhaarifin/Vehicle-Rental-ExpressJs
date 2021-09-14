@@ -113,7 +113,7 @@ module.exports = {
       image: req.files,
       stock: req.body.stock,
     };
-    const locationImage = `${process.env.BASE_URL}/file/`;
+    const locationImage = `file/`;
     const images = [];
     data.image.forEach((item) => {
       images.push((locationImage + item.filename).replace(/ /g, ''));
@@ -159,7 +159,7 @@ module.exports = {
     };
     if (req.files.length > 0) {
       data.image = req.files;
-      const locationImage = `${process.env.BASE_URL}/file/`;
+      const locationImage = `file/`;
       const images = [];
       data.image.forEach((item) => {
         images.push((locationImage + item.filename).replace(/ /g, ''));
