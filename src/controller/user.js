@@ -90,24 +90,32 @@ module.exports = {
           },
           function (err, token) {
             res.cookie('token', token, {
+              httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
-              sameSite: 'none',
-              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
             });
             res.cookie('avatar', payload.avatar, {
+              httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
-              sameSite: 'none',
-              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
             });
             res.cookie('roles', payload.roles, {
+              httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
-              sameSite: 'none',
-              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
             });
             res.cookie('id', payload.id, {
+              httpOnly: true,
               maxAge: 60 * 60 * 60 * 24,
-              sameSite: 'none',
-              secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+              secure: true,
+              path: '/',
+              sameSite: 'strict',
             });
             helper.response(res, 'Login success', payload, 200);
           }
