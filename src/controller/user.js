@@ -91,28 +91,28 @@ module.exports = {
           function (err, token) {
             res.cookie('token', token, {
               httpOnly: true,
-              maxAge: 60 * 60 * 60 * 24,
+              maxAge: 24 * 60 * 60 * 1000,
               secure: true,
               path: '/',
               sameSite: 'None',
             });
             res.cookie('avatar', payload.avatar, {
               httpOnly: true,
-              maxAge: 60 * 60 * 60 * 24,
+              maxAge: 24 * 60 * 60 * 1000,
               secure: true,
               path: '/',
               sameSite: 'None',
             });
             res.cookie('roles', payload.roles, {
               httpOnly: true,
-              maxAge: 60 * 60 * 60 * 24,
+              maxAge: 24 * 60 * 60 * 1000,
               secure: true,
               path: '/',
               sameSite: 'None',
             });
             res.cookie('id', payload.id, {
               httpOnly: true,
-              maxAge: 60 * 60 * 60 * 24,
+              maxAge: 24 * 60 * 60 * 1000,
               secure: true,
               path: '/',
               sameSite: 'None',
