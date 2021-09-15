@@ -139,7 +139,7 @@ module.exports = {
       data.gender = req.body.gender;
     }
     if (req.file) {
-      data.avatar = `${process.env.BASE_URL}/file/${req.file.filename}`;
+      data.avatar = `${process.env.BACKEND_URL}/file/${req.file.filename}`;
     }
     users
       .updateUser(id, data)
