@@ -61,15 +61,7 @@ module.exports = {
               for (let i = 0; i < products.length; i++) {
                 let product = products[i];
                 const element = JSON.parse(products[i].image);
-                if (element.slice(0, 4) == 'http') {
-                  element.replace('http://localhost:4000', `${process.env.BACKEND_URL}`);
-                  product.image = element;
-                } else if (element.slice(0, 5) == 'file/') {
-                  element.replace('file/', `${process.env.BACKEND_URL}/file/`);
-                  product.image = element;
-                } else {
-                  product.image = element;
-                }
+                product.image = element;
                 data.push(product);
               }
 
