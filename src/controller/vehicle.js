@@ -149,7 +149,7 @@ module.exports = {
       });
   },
 
-  updateVehicle: (req, res) => {
+  updateVehicle: async (req, res) => {
     const id = req.params.id;
     const data = {
       location_id: req.body.location_id,
