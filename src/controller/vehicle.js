@@ -124,12 +124,7 @@ module.exports = {
     if (!stock) return helper.response(res, "Stock can't be null!", null, 400);
 
     const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
-
-    const locationImage = `${process.env.BACKEND_URL}/file/`;
     const images = [];
-    // data.image.forEach((item) => {
-    //   images.push((locationImage + item.filename).replace(/ /g, ''));
-    // });
     for (const file of data.image) {
       const { path } = file;
       const newPath = await uploader(path);
@@ -167,12 +162,15 @@ module.exports = {
     };
     if (req.files.length > 0) {
       data.image = req.files;
-      const locationImage = `${process.env.BACKEND_URL}/file/`;
+
+      const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
       const images = [];
-      data.image.forEach((item) => {
-        images.push((locationImage + item.filename).replace(/ /g, ''));
-      });
-      const toStr = JSON.stringify(images);
+      for (const file of data.image) {
+        const { path } = file;
+        const newPath = await uploader(path);
+        images.push(newPath.url);
+      }
+      const toStr = await JSON.stringify(images);
       data.image = toStr;
     }
     vehicle

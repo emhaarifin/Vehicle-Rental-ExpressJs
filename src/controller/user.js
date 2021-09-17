@@ -7,6 +7,7 @@ const helper = require('../helper/response');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
+const cloudinary = require('../middleware/cloudinary');
 module.exports = {
   register: async (req, res) => {
     const { fullname, email, password, roles } = req.body;
@@ -139,7 +140,10 @@ module.exports = {
       data.gender = req.body.gender;
     }
     if (req.file) {
-      data.avatar = `${process.env.BACKEND_URL}/file/${req.file.filename}`;
+      const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+      const { path } = data.avatar;
+      const newPath = await uploader(path);
+      data.avatar = newPath.url;
     }
     users
       .updateUser(id, data)
