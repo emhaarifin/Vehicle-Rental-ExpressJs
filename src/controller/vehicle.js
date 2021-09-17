@@ -133,7 +133,6 @@ module.exports = {
     for (const file of data.image) {
       const { path } = file;
       const newPath = await uploader(path);
-      console.log('newPath', newPath);
       images.push(newPath.url);
     }
     const toStr = await JSON.stringify(images);
