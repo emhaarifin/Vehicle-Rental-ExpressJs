@@ -101,7 +101,7 @@ module.exports = {
       });
   },
 
-  addVehicle: (req, res) => {
+  addVehicle: async (req, res) => {
     const data = {
       location_id: req.body.location_id,
       category_id: req.body.category_id,
