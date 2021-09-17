@@ -1,7 +1,7 @@
 const vehicle = require('../models/vehicle');
 const helper = require('../helper/response');
 const mysql = require('mysql');
-
+const cloudinary = require('../middleware/cloudinary');
 const path = require('path');
 const fs = require('fs');
 const dirPath = path.join(__dirname, '../../uploads');
@@ -122,12 +122,21 @@ module.exports = {
     if (!status) return helper.response(res, "Status can't be null!", null, 400);
     if (!image) return helper.response(res, "Image can't be null!", null, 400);
     if (!stock) return helper.response(res, "Stock can't be null!", null, 400);
+
+    const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
+
     const locationImage = `${process.env.BACKEND_URL}/file/`;
     const images = [];
-    data.image.forEach((item) => {
-      images.push((locationImage + item.filename).replace(/ /g, ''));
-    });
-    const toStr = JSON.stringify(images);
+    // data.image.forEach((item) => {
+    //   images.push((locationImage + item.filename).replace(/ /g, ''));
+    // });
+    for (const file of data.image) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      console.log('newPath', newPath);
+      images.push(newPath.url);
+    }
+    const toStr = await JSON.stringify(images);
     data.image = toStr;
     vehicle
       .addVehicle(data)
