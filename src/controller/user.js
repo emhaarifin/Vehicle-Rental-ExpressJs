@@ -140,6 +140,7 @@ module.exports = {
       data.gender = req.body.gender;
     }
     if (req.file) {
+      data.avatar = req.file;
       const uploader = async (path) => await cloudinary.uploads(path, 'Vehicle Rental');
       const { path } = data.avatar;
       const newPath = await uploader(path);
