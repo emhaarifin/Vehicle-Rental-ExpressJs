@@ -62,6 +62,7 @@ module.exports = {
     const data = {
       method: req.body.method,
       status: 'pay',
+      updatedAt: new Date(),
     };
     reservation
       .payReservation(id, data)
