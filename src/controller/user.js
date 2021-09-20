@@ -74,15 +74,16 @@ module.exports = {
       const checkPassword = await bcrypt.compare(req.body.password, checkUser[0].password);
       if (checkPassword) {
         const { id, name, roles, avatar } = checkUser[0];
-        const payload = {
-          id,
-          name,
-          roles,
-          avatar,
-          ...checkUser[0],
-        };
-        delete payload.email;
-        delete payload.password;
+        const payload = [
+          {
+            id,
+            name,
+            roles,
+            avatar,
+            ...checkUser[0],
+          },
+        ];
+        delete payload[0].password;
         jwt.sign(
           payload,
           process.env.SECRET_KEY,
