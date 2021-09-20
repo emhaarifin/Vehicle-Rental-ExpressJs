@@ -15,6 +15,8 @@ module.exports = {
       subTotal,
       expDate: exp,
       status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     reservation
       .addReservation(data)
