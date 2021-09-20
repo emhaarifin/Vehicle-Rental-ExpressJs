@@ -40,4 +40,29 @@ module.exports = {
       );
     });
   },
+  payReservation: (id, data) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`UPDATE reservation SET ? WHERE id = ?`, [data, id], (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  },
+  getReservationById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT reservation.*, vehicles.image, category.name_category, location.name_location FROM reservation LEFT JOIN vehicles ON reservation.vehicleId = vehicles.id LEFT JOIN category ON vehicles.category_id = category.id LEFT JOIN location ON vehicles.location_id = location.id WHERE reservation.id = "${id}"`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        }
+      );
+    });
+  },
 };

@@ -1,15 +1,19 @@
 const reservation = require('../models/reservation');
 const helper = require('../helper/response');
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment');
+moment.locale('id');
 module.exports = {
   addreservation: (req, res) => {
-    const { id, userId, vehicleId, qty, subTotal } = req.body;
+    const { userId, vehicleId, qty, subTotal } = req.body;
+    const exp = new Date(1);
     const data = {
       id: uuidv4(),
       userId,
       vehicleId,
       qty,
       subTotal,
+      expDate: exp,
       status: 'pending',
     };
     reservation
@@ -33,38 +37,57 @@ module.exports = {
     reservation
       .getReservation(userId)
       .then((result) => {
-        if (result[0]) {
-          const products = result;
-          const data = [];
-          for (let i = 0; i < products.length; i++) {
-            let product = products[i];
-            const element = JSON.parse(products[i].image);
-            product.image = element;
-            data.push(product);
-          }
-          helper.response(res, 'Success get', data);
-        } else {
-          helper.response(res, 'Data Not Fount', null, 404);
-        }
+        const payload = result.map((item) => {
+          return {
+            ...item,
+            image: JSON.parse(item.image),
+            startDate: moment(item.startDate).format('LLLL'),
+            expDate: moment(item.expDate).format('LLLL'),
+            createdAt: moment(item.createdAt).format('LLLL'),
+            updatedAt: moment(item.updatedAt).format('LLLL'),
+          };
+        });
+        result.length
+          ? helper.response(res, 'Sukses', payload, 200)
+          : helper.response(res, 'Belum ada reservation', payload, 200);
       })
       .catch((err) => {
         helper.response(res, err.message, null, 401);
       });
   },
   finishReservation: (req, res) => {
-    const { id, userId, vehicleId, qty, subTotal } = req.body;
+    const id = req.params.id;
     const data = {
-      id: uuidv4(),
-      userId,
-      vehicleId,
-      qty,
-      subTotal,
-      status: 'pending',
+      method: req.body.method,
+      status: 'pay',
     };
     reservation
-      .addReservation(data)
-      .then(() => {
-        helper.response(res, 'Succes input data', data, 200);
+      .payReservation(id, data)
+      .then(({ affectedRows }) => {
+        affectedRows
+          ? helper.response(res, 'Succes input data', data, 200)
+          : helper.response(res, 'Tidak ada perubahn data', data, 200);
+      })
+      .catch((err) => {
+        helper.response(res, err.message, null, 401);
+      });
+  },
+  getReservationById: (req, res) => {
+    const id = req.params.id;
+    reservation
+      .getReservationById(id)
+      .then((result) => {
+        const payload = result.map((item) => {
+          return {
+            ...item,
+            image: JSON.parse(item.image),
+            startDate: moment(item.startDate).format('LLLL'),
+            expDate: moment(item.expDate).format('LLLL'),
+            createdAt: moment(item.createdAt).format('LLLL'),
+            updatedAt: moment(item.updatedAt).format('LLLL'),
+          };
+        });
+        helper.response(res, 'Succes get data', payload, 200);
       })
       .catch((err) => {
         helper.response(res, err.message, null, 401);
