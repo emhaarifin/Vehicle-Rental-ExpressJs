@@ -24,7 +24,7 @@ module.exports = {
     });
   },
   getVehicleCount: () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       connection.query('SELECT COUNT(*) as TotalVehicle FROM vehicles', (error, result) => {
         if (!error) {
           resolve(result);
